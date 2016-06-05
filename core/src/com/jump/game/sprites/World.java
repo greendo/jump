@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.jump.game.Jumper;
 
 import java.util.Random;
-import java.util.Stack;
 
 /**
  * Created by jc on 02.06.16.
@@ -25,13 +25,13 @@ public class World {
     private Random rand;
     protected static boolean debug;
     /** Платформы */
-    private Stack<WorldPlatform> platforms;
+    private Array<WorldPlatform> platforms;
 
     public World(String worldName, boolean debug) {
         this.worldName = worldName;
         texture = new Texture(worldName + "/back1.png");
         rand = new Random();
-        platforms = new Stack<WorldPlatform>();
+        platforms = new Array<WorldPlatform>();
         this.debug = debug;
 
         for(int i = 0; i < PLAT_COUNT; i++) {
@@ -81,6 +81,18 @@ public class World {
             frame.setPosition(position.x + GAP, Jumper.HEIGHT / 4 - 15);
         }
 
+        public void reInit(float x) {
+            texture = new Texture(worldName + "/plat1.png");
+            position = new Vector2(x, 0);
+            speed = new Vector2(0, 0);
+
+            width = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
+            hole = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
+
+            frame = new Rectangle(x + GAP, Jumper.HEIGHT / 4 - 15,
+                    width - 2 * GAP, 1);
+        }
+
         public int getHole() {return hole;}
         public int getWidth() {return width;}
     }
@@ -96,7 +108,7 @@ public class World {
         player.update(delta);
 
         /** Траблы с камерой */
-        if(player.position.x - camera.position.x < Jumper.WIDTH / 3)
+        if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
             camera.position.x += 1;
         else
             camera.position.x += 5;
@@ -104,13 +116,17 @@ public class World {
         boolean onPl = false;
 
         /** Траблы с рандомом */
-        if(platforms.peek().getWidth() + platforms.peek().getPosition().x < camera.position.x) {
-            float valera = platforms.elementAt(PLAT_COUNT - 1).getPosition().x +
-                    platforms.elementAt(PLAT_COUNT - 1).getWidth() +
-                    platforms.elementAt(PLAT_COUNT - 1).getHole();
-            platforms.pop();
-            platforms.add(new WorldPlatform(valera));
-        }
+        for(int i = 0; i < PLAT_COUNT; i++)
+            if(platforms.get(i).getWidth() + platforms.get(i).getPosition().x < camera.position.x - Jumper.WIDTH / 2) {
+                if(i == 0)
+                    platforms.get(i).reInit(platforms.get(PLAT_COUNT - 1).getPosition().x +
+                            platforms.get(PLAT_COUNT - 1).getWidth() +
+                            platforms.get(PLAT_COUNT - 1).getHole());
+                else
+                    platforms.get(i).reInit(platforms.get(i - 1).getPosition().x +
+                            platforms.get(i - 1).getWidth() +
+                            platforms.get(i - 1).getHole());
+            }
 
         for(World.WorldPlatform wm : platforms)
             if(player.collides(wm.getFrame()))
@@ -140,27 +156,17 @@ public class World {
     }
 
     private void debug(SpriteBatch sb, BitmapFont font, OrthographicCamera camera, Player player) {
-        font.draw(sb, "posX: " + platforms.peek().getPosition().x +
-                        " width: " + platforms.peek().getWidth() +
-                        " cameraX: " + camera.position.x,
+        font.draw(sb, " cameraX: " + camera.position.x,
                 camera.position.x - camera.viewportWidth / 2, 60);
-        font.draw(sb, "spdX: " + player.speed.x +
-                        " spdY: " + player.speed.y,
-                camera.position.x - camera.viewportWidth / 2, 90);
-        font.draw(sb, "plX: " + player.position.x +
-                        " plY: " + player.position.y,
-                camera.position.x - camera.viewportWidth / 2, 120);
 
-
-        for(int i = 0; i < PLAT_COUNT; i++) {
-            font.draw(sb, "rectX: " + platforms.get(i).getFrame().getX(), camera.position.x - camera.viewportWidth / 2 + i * 100, 150);
-            font.draw(sb, "rectY: " + platforms.get(i).getFrame().getY(), camera.position.x - camera.viewportWidth / 2 + i * 100, 180);
-
-            font.draw(sb, "textX: " + platforms.get(i).getFrame().getX(), camera.position.x - camera.viewportWidth / 2 + i * 100, 210);
-            font.draw(sb, "textY: " + platforms.get(i).getFrame().getY(), camera.position.x - camera.viewportWidth / 2 + i * 100, 240);
-        }
+        for(int i = 0; i < PLAT_COUNT; i++)
+            font.draw(sb, "textX: " + platforms.get(i).getFrame().getX(), platforms.get(i).getPosition().x, 210);
     }
 
     /** Метод для чистки памяти, юзаем сами при паузе или вызывается при звонке етц. */
-    public void dispose() {}
+    public void dispose() {
+        texture.dispose();
+        for(WorldPlatform wp : platforms)
+            wp.getTexture().dispose();
+    }
 }
