@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.jump.game.Jumper;
 
@@ -25,76 +23,24 @@ public class World {
     private Random rand;
     protected static boolean debug;
     /** Платформы */
-    private Array<WorldPlatform> platforms;
+    private Array<PlatformContainer> platforms;
 
     public World(String worldName, boolean debug) {
         this.worldName = worldName;
         texture = new Texture(worldName + "/back1.png");
         rand = new Random();
-        platforms = new Array<WorldPlatform>();
+        platforms = new Array<PlatformContainer>();
         this.debug = debug;
 
         for(int i = 0; i < PLAT_COUNT; i++) {
             if(i == 0)
-                platforms.add(new WorldPlatform(0));
+                platforms.add(new PlatformContainer(0, worldName));
             else
-                platforms.add(new WorldPlatform(platforms.get(i - 1).getPosition().x +
+                platforms.add(new PlatformContainer(platforms.get(i - 1).getPosition().x +
                 + platforms.get(i - 1).getWidth() +
-                + platforms.get(i - 1).getHole()));
+                + platforms.get(i - 1).getHole(),
+                        worldName));
         }
-    }
-
-
-
-
-
-
-    /** Вложеный приватный класс для платформ */
-    private class WorldPlatform extends Objects {
-
-        /** Контроль интерактивной части текстур*/
-        private int GAP = 15;
-
-        /** Минимальная и максимальная ширина для платформ и ям */
-        private int MAX_WIDTH = Jumper.WIDTH / 3;
-        private int MIN_WIDTH = Jumper.WIDTH / 5;
-
-        /** Ширина для платформ и ям */
-        private int width;
-        private int hole;
-
-        private WorldPlatform(float x) {
-            texture = new Texture(worldName + "/plat1.png");
-            position = new Vector2(x, 0);
-            speed = new Vector2(0, 0);
-
-            width = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
-            hole = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
-
-            frame = new Rectangle(x + GAP, Jumper.HEIGHT / 4 - 15,
-                    width - 2 * GAP, 1);
-        }
-
-        @Override
-        public void update(float delta) {
-            position.add(speed.x * delta, speed.y);
-            frame.setPosition(position.x + GAP, Jumper.HEIGHT / 4 - 15);
-        }
-
-        public void reInit(float x) {
-            texture = new Texture(worldName + "/plat1.png");
-            position = new Vector2(x, 0);
-            speed = new Vector2(0, 0);
-
-            width = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
-            hole = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
-
-            frame = new Rectangle(x + GAP, Jumper.HEIGHT / 4 - 15,
-                    width - 2 * GAP, 1);
-        }
-
-        public int getHole() {return hole;}
-        public int getWidth() {return width;}
     }
 
 
@@ -111,14 +57,18 @@ public class World {
         if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
             camera.position.x += 1;
         else
-            camera.position.x += 5;
+            camera.position.x += 10;
 
         boolean onPl = false;
+        int height = Jumper.HEIGHT / 4;
 
         /** Траблы с рандомом */
-        for(int i = 0; i < PLAT_COUNT; i++)
-            if(platforms.get(i).getWidth() + platforms.get(i).getPosition().x < camera.position.x - Jumper.WIDTH / 2) {
-                if(i == 0)
+        for(int i = 0; i < PLAT_COUNT; i++) {
+            /** Тут мы ивентим рост или снижение платформы */
+            platforms.get(i).update(delta);
+            /** Тут переинитим платформу, слева от экрана */
+            if (platforms.get(i).getWidth() + platforms.get(i).getPosition().x < camera.position.x - Jumper.WIDTH / 2) {
+                if (i == 0)
                     platforms.get(i).reInit(platforms.get(PLAT_COUNT - 1).getPosition().x +
                             platforms.get(PLAT_COUNT - 1).getWidth() +
                             platforms.get(PLAT_COUNT - 1).getHole());
@@ -127,12 +77,16 @@ public class World {
                             platforms.get(i - 1).getWidth() +
                             platforms.get(i - 1).getHole());
             }
+        }
 
-        for(World.WorldPlatform wm : platforms)
-            if(player.collides(wm.getFrame()))
+        for(PlatformContainer wm : platforms)
+            if(player.collides(wm.getFrame())) {
                 onPl = true;
+                height = wm.getHeight();
+                wm.setTouchEvent();
+            }
 
-        player.plat(onPl, Jumper.HEIGHT);
+        player.plat(onPl, height);
 
         /** check if dead */
         if(player.getPosition().y <= 0 || camera.position.x > player.position.x + Jumper.WIDTH)
@@ -147,8 +101,8 @@ public class World {
         /** Задний фон */
         sb.draw(texture, camera.position.x - camera.viewportWidth / 2, 0, Jumper.WIDTH, Jumper.HEIGHT);
 
-        for(World.WorldPlatform wm : platforms) {
-            sb.draw(wm.getTexture(), wm.getPosition().x, wm.getPosition().y, wm.getWidth(), Jumper.HEIGHT / 4);
+        for(PlatformContainer wm : platforms) {
+            sb.draw(wm.getTexture(), wm.getPosition().x, wm.getPosition().y, wm.getWidth(), wm.getHeight());
         }
 
         if(debug)
@@ -159,14 +113,19 @@ public class World {
         font.draw(sb, " cameraX: " + camera.position.x,
                 camera.position.x - camera.viewportWidth / 2, 60);
 
-        for(int i = 0; i < PLAT_COUNT; i++)
+        for(int i = 0; i < PLAT_COUNT; i++) {
             font.draw(sb, "textX: " + platforms.get(i).getFrame().getX(), platforms.get(i).getPosition().x, 210);
+            font.draw(sb, "type: " + platforms.get(i).getType(), platforms.get(i).getPosition().x, 240);
+
+            font.draw(sb, "frameX: " + platforms.get(i).getFrame().x, platforms.get(i).getPosition().x, 270);
+            font.draw(sb, "frameY: " + platforms.get(i).getFrame().y, platforms.get(i).getPosition().x, 300);
+        }
     }
 
     /** Метод для чистки памяти, юзаем сами при паузе или вызывается при звонке етц. */
     public void dispose() {
         texture.dispose();
-        for(WorldPlatform wp : platforms)
+        for(PlatformContainer wp : platforms)
             wp.getTexture().dispose();
     }
 }

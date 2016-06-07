@@ -38,8 +38,6 @@ public class Player extends Objects {
 
     public void jump(Vector2 valera) {
         if(gravity == 0) {
-//            speed.y = JUMP_SPD;
-//            speed.x = JUMP_SPD;
             speed.y = valera.y * JUMP_SPD;
             speed.x = valera.x * JUMP_SPD;
         }
@@ -52,9 +50,9 @@ public class Player extends Objects {
             gravity = 0;
             speed.y = 0;
             speed.x = 0;
-            position.y = h / 4 - 17;
+            position.y = h - 17;
         }
-        else if(position.y > h / 4)
+        else if(position.y > h)
             gravity = DEF_GRAV;
         else {
             gravity = DEF_GRAV;
