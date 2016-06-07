@@ -57,15 +57,19 @@ public class World {
         if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
             camera.position.x += 1;
         else
-            camera.position.x += 10;
+            camera.position.x += 7;
 
+        /** На платформе ли */
         boolean onPl = false;
         int height = Jumper.HEIGHT / 4;
+        /** На скользящей платформе ли */
+        int slider = 0;
 
         /** Траблы с рандомом */
         for(int i = 0; i < PLAT_COUNT; i++) {
             /** Тут мы ивентим рост или снижение платформы */
-            platforms.get(i).update(delta);
+            if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
+                platforms.get(i).update(delta);
             /** Тут переинитим платформу, слева от экрана */
             if (platforms.get(i).getWidth() + platforms.get(i).getPosition().x < camera.position.x - Jumper.WIDTH / 2) {
                 if (i == 0)
@@ -79,14 +83,16 @@ public class World {
             }
         }
 
-        for(PlatformContainer wm : platforms)
-            if(player.collides(wm.getFrame())) {
+        for(PlatformContainer pc : platforms)
+            if(player.collides(pc.getFrame())) {
                 onPl = true;
-                height = wm.getHeight();
-                wm.setTouchEvent();
+                height = pc.getHeight();
+                pc.setTouchEvent();
+                if(pc.getType() == "platformSlide")
+                    slider = 3;
             }
 
-        player.plat(onPl, height);
+        player.plat(onPl, height, slider);
 
         /** check if dead */
         if(player.getPosition().y <= 0 || camera.position.x > player.position.x + Jumper.WIDTH)

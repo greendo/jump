@@ -45,11 +45,20 @@ public class Player extends Objects {
 
     public void tackle() {}
 
-    public void plat(boolean onPl, int h) {
-        if(onPl && speed.y <= 0) {
+    public void plat(boolean onPl, int h, int slider) {
+        if(onPl && speed.y <= 0 && slider == 0) {
             gravity = 0;
             speed.y = 0;
             speed.x = 0;
+            position.y = h - 17;
+        }
+        else if(onPl && speed.y <= 0 && slider == 3) {
+            gravity = 0;
+            speed.y = 0;
+            if(speed.x > 0)
+                speed.x -= 10;
+            else
+                speed.x = 0;
             position.y = h - 17;
         }
         else if(position.y > h)

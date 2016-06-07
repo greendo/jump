@@ -19,8 +19,10 @@ public class Platform extends Objects {
     protected int GAP = 15;
 
     /** Минимальная и максимальная ширина для платформ и ям */
-    private int MAX_WIDTH = Jumper.WIDTH / 3;
-    private int MIN_WIDTH = Jumper.WIDTH / 5;
+    private int MAX_PLAT_WIDTH = Jumper.WIDTH / 3;
+    private int MIN_PLAT_WIDTH = Jumper.WIDTH / 5;
+    private int MAX_HOLE_WIDTH = Jumper.WIDTH / 5;
+    private int MIN_HOLE_WIDTH = Jumper.WIDTH / 6;
 
     /** Ширина для платформ и ям */
     private int width;
@@ -43,8 +45,8 @@ public class Platform extends Objects {
         position = new Vector2(x, 0);
         speed = new Vector2(0, 0);
 
-        width = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
-        hole = rand.nextInt(MAX_WIDTH) + MIN_WIDTH;
+        width = rand.nextInt(MAX_PLAT_WIDTH) + MIN_PLAT_WIDTH;
+        hole = rand.nextInt(MAX_HOLE_WIDTH) + MIN_HOLE_WIDTH;
         height = Jumper.HEIGHT / 4;
 
         frame = new Rectangle(x + GAP, Jumper.HEIGHT / 4 - 15,

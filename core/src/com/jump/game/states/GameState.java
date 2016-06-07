@@ -43,7 +43,7 @@ public class GameState extends State {
     public void update(float delta) {
         handleInput();
 
-        if(world.update(delta, player, camera))
+        if(world.update(delta, player, camera) || player.getPosition().y >= Jumper.HEIGHT)
             sManager.init(new DeathState(sManager));
 
         camera.update();
