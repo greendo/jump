@@ -53,6 +53,7 @@ public class PlatformContainer {
     public int getWidth() {return platform.getWidth();}
     public int getHole() {return platform.getHole();}
     public Rectangle getFrame() {return platform.getFrame();}
+    public Rectangle getFrameLow() {return platform.getFrameLow();}
     public Texture getTexture() {return platform.getTexture();}
     public int getHeight() {return platform.getHeight();}
     public String getType() {return type;}

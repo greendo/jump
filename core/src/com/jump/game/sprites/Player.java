@@ -3,6 +3,7 @@ package com.jump.game.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.jump.game.sprites.platforms.Platform;
 
 /**
  * Created by jc on 25.05.16.
@@ -43,16 +44,18 @@ public class Player extends Objects {
         }
     }
 
-    public void tackle() {}
-
-    public void plat(boolean onPl, int h, int slider) {
-        if(onPl && speed.y <= 0 && slider == 0) {
+    public void plat(int onPl, int h, int slider) {
+        /** Для определения, врезался или приземлился на платформу */
+        int wut = h - 30;
+        /** Держаться на платформе */
+        if(onPl == 2 && position.y > wut && speed.y <= 0 && slider == 0) {
             gravity = 0;
             speed.y = 0;
             speed.x = 0;
             position.y = h - 17;
         }
-        else if(onPl && speed.y <= 0 && slider == 3) {
+        /** Для скользящих платформ */
+        else if(onPl == 2 && position.y > wut && speed.y <= 0 && slider == 3) {
             gravity = 0;
             speed.y = 0;
             if(speed.x > 0)
@@ -61,8 +64,15 @@ public class Player extends Objects {
                 speed.x = 0;
             position.y = h - 17;
         }
+        /** Врезаться в платформу, если низко летел */
+        else if(onPl == 1 && position.y < h - 20 && speed.y < 0 && speed.x > 0) {
+            position.x -= texture.getWidth() / 2;
+            speed.x = -5;
+        }
+        /** Установить гравитацию при прыжке */
         else if(position.y > h)
             gravity = DEF_GRAV;
+        /** Спрыгнуть (осталось от раннера) */
         else {
             gravity = DEF_GRAV;
             if(speed.y == 0)
@@ -70,6 +80,11 @@ public class Player extends Objects {
         }
     }
 
-    public boolean collides(Rectangle platform) {return platform.overlaps(frame);}
-    public void reposition(float x, float y) {position.set(x, y);}
+    public int collides(PlatformContainer platform) {
+        if(platform.getFrameLow().overlaps(frame))
+            return 1;
+        if(platform.getFrame().overlaps(frame))
+            return 2;
+        return 0;
+    }
 }

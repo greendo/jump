@@ -55,17 +55,16 @@ public class World {
 
         /** Траблы с камерой */
         if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
-            camera.position.x += 1;
+            camera.position.x += 2;
         else
-            camera.position.x += 7;
+            camera.position.x += 15;
 
         /** На платформе ли */
-        boolean onPl = false;
+        int onPl = 0;
         int height = Jumper.HEIGHT / 4;
         /** На скользящей платформе ли */
         int slider = 0;
 
-        /** Траблы с рандомом */
         for(int i = 0; i < PLAT_COUNT; i++) {
             /** Тут мы ивентим рост или снижение платформы */
             if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
@@ -84,8 +83,8 @@ public class World {
         }
 
         for(PlatformContainer pc : platforms)
-            if(player.collides(pc.getFrame())) {
-                onPl = true;
+            if(player.collides(pc) != 0) {
+                onPl = player.collides(pc);
                 height = pc.getHeight();
                 pc.setTouchEvent();
                 if(pc.getType() == "platformSlide")

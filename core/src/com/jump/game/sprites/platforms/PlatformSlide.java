@@ -13,5 +13,6 @@ public class PlatformSlide extends Platform {
     public void update(float delta) {
         position.add(speed.x * delta, 0);
         frame.setPosition(position.x + GAP, height - 15);
+        frameLow.setPosition(position.x + GAP, 0);
     }
 }

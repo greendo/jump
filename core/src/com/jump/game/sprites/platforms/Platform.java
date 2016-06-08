@@ -19,16 +19,19 @@ public class Platform extends Objects {
     protected int GAP = 15;
 
     /** Минимальная и максимальная ширина для платформ и ям */
-    private int MAX_PLAT_WIDTH = Jumper.WIDTH / 3;
+    private int MAX_PLAT_WIDTH = Jumper.WIDTH / 4;
     private int MIN_PLAT_WIDTH = Jumper.WIDTH / 5;
-    private int MAX_HOLE_WIDTH = Jumper.WIDTH / 5;
-    private int MIN_HOLE_WIDTH = Jumper.WIDTH / 6;
+    private int MAX_HOLE_WIDTH = Jumper.WIDTH / 6;
+    private int MIN_HOLE_WIDTH = Jumper.WIDTH / 7;
 
     /** Ширина для платформ и ям */
     private int width;
     private int hole;
     /** Высота для платформ */
     protected int height;
+
+    /** Фрейм для низкого врезания */
+    protected Rectangle frameLow;
 
     /** Ворлднэйм */
     private String worldName;
@@ -51,16 +54,19 @@ public class Platform extends Objects {
 
         frame = new Rectangle(x + GAP, Jumper.HEIGHT / 4 - 15,
                 width - 2 * GAP, 1);
+        frameLow = new Rectangle(x + GAP, 0, width - 2 * GAP, Jumper.HEIGHT / 4 - 30);
     }
 
     @Override
     public void update(float delta) {
         position.add(speed.x * delta, speed.y * delta);
         frame.setPosition(position.x + GAP, height - 15);
+        frameLow.setPosition(position.x + GAP, 0);
     }
 
     public int getHole() {return hole;}
     public int getWidth() {return width;}
     public int getHeight() {return height;}
     public void setTouchEvent() {touchEvent = true;}
+    public Rectangle getFrameLow() {return frameLow;}
 }

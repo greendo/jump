@@ -1,5 +1,7 @@
 package com.jump.game.sprites.platforms;
 
+import com.jump.game.Jumper;
+
 /**
  * Created by jc on 07.06.16.
  */
@@ -16,5 +18,6 @@ public class PlatformCollapse extends Platform {
         if(touchEvent)
             height += speed.y;
         frame.setPosition(position.x + GAP, height - 15);
+        frameLow.setPosition(position.x + GAP, height - Jumper.HEIGHT / 4);
     }
 }
