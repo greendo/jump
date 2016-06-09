@@ -3,7 +3,7 @@ package com.jump.game.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.jump.game.sprites.platforms.Platform;
+import com.jump.game.Jumper;
 
 /**
  * Created by jc on 25.05.16.
@@ -16,6 +16,9 @@ public class Player extends Objects {
     public static final int DEF_GRAV = -15;
     /** JUMP SPEED Oy */
     public static final int JUMP_SPD = 3;
+    /** Константы для ограничения скорости */
+    public static final float JUMP_X_MAX = (float) (Jumper.WIDTH / 1.3);
+    public static final float JUMP_Y_MAX = (float) (Jumper.HEIGHT / 0.75);
 
     public Player(int x, int y) {
         position = new Vector2(x, y);
@@ -41,6 +44,11 @@ public class Player extends Objects {
         if(gravity == 0) {
             speed.y = valera.y * JUMP_SPD;
             speed.x = valera.x * JUMP_SPD;
+            /** Ограничитель скорости */
+            if(speed.y > JUMP_Y_MAX)
+                speed.y = JUMP_Y_MAX;
+            if(speed.x > JUMP_X_MAX)
+                speed.x = JUMP_X_MAX;
         }
     }
 

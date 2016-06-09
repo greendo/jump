@@ -20,7 +20,7 @@ public class Platform extends Objects {
 
     /** Минимальная и максимальная ширина для платформ и ям */
     private int MAX_PLAT_WIDTH = Jumper.WIDTH / 4;
-    private int MIN_PLAT_WIDTH = Jumper.WIDTH / 5;
+    private int MIN_PLAT_WIDTH = (int) (Jumper.WIDTH / 4.5);
     private int MAX_HOLE_WIDTH = Jumper.WIDTH / 6;
     private int MIN_HOLE_WIDTH = Jumper.WIDTH / 7;
 

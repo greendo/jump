@@ -57,7 +57,7 @@ public class World {
         if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
             camera.position.x += 2;
         else
-            camera.position.x += 15;
+            camera.position.x += 5;
 
         /** На платформе ли */
         int onPl = 0;
@@ -125,6 +125,12 @@ public class World {
             font.draw(sb, "frameX: " + platforms.get(i).getFrame().x, platforms.get(i).getPosition().x, 270);
             font.draw(sb, "frameY: " + platforms.get(i).getFrame().y, platforms.get(i).getPosition().x, 300);
         }
+
+        font.draw(sb, "playerSpdX: " + player.speed.x, camera.position.x + 50, 300);
+        font.draw(sb, "playerSpdY: " + player.speed.y, camera.position.x + 50, 330);
+
+        font.draw(sb, "width: " + Jumper.WIDTH, camera.position.x + 50, 360);
+        font.draw(sb, "height: " + Jumper.HEIGHT, camera.position.x + 50, 390);
     }
 
     /** Метод для чистки памяти, юзаем сами при паузе или вызывается при звонке етц. */
