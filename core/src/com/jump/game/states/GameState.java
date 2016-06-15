@@ -22,7 +22,7 @@ public class GameState extends State {
         super(sm);
         camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
 
-        player = new Player(50, Jumper.HEIGHT / 3 + 20);
+        player = new Player(50, Jumper.HEIGHT / 3 + 50);
         world = new World("test", debug);
 
         /** for swipes */
@@ -56,7 +56,7 @@ public class GameState extends State {
         sb.begin();
 
         world.render(sb, font, camera, player);
-        sb.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
+        sb.draw(player.getCurrentTexture(), player.getPosition().x, player.getPosition().y);
 
         sb.end();
     }

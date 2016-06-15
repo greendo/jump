@@ -18,6 +18,6 @@ public class PlatformGrow extends Platform {
         if(touchEvent)
             height += speed.y;
         frame.setPosition(position.x + GAP, height - 15);
-        frameLow.setPosition(position.x + GAP,  height - Jumper.HEIGHT / 4);
+        frameLow.setPosition(position.x + GAP,  height - Jumper.HEIGHT / 4 - lowGap);
     }
 }

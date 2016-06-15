@@ -20,7 +20,7 @@ public class Platform extends Objects {
 
     /** Минимальная и максимальная ширина для платформ и ям */
     private int MAX_PLAT_WIDTH = Jumper.WIDTH / 4;
-    private int MIN_PLAT_WIDTH = (int) (Jumper.WIDTH / 4.5);
+    private int MIN_PLAT_WIDTH = Jumper.WIDTH / 5;
     private int MAX_HOLE_WIDTH = Jumper.WIDTH / 6;
     private int MIN_HOLE_WIDTH = Jumper.WIDTH / 7;
 
@@ -40,6 +40,9 @@ public class Platform extends Objects {
     /** Для платформ, которые имеют ивент после приземления игрока */
     protected boolean touchEvent;
 
+    /** Для разброса по высоте */
+    protected int lowGap;
+
     public Platform(float x, String worldName) {
         touchEvent = false;
         this.worldName = worldName;
@@ -50,11 +53,13 @@ public class Platform extends Objects {
 
         width = rand.nextInt(MAX_PLAT_WIDTH) + MIN_PLAT_WIDTH;
         hole = rand.nextInt(MAX_HOLE_WIDTH) + MIN_HOLE_WIDTH;
-        height = Jumper.HEIGHT / 4;
 
-        frame = new Rectangle(x + GAP, Jumper.HEIGHT / 4 - 15,
+        lowGap =  rand.nextInt(150);
+        height = Jumper.HEIGHT / 4 + lowGap;
+
+        frame = new Rectangle(x + GAP, height - 15,
                 width - 2 * GAP, 1);
-        frameLow = new Rectangle(x + GAP, 0, width - 2 * GAP, Jumper.HEIGHT / 4 - 30);
+        frameLow = new Rectangle(x + GAP, 0, width - 2 * GAP, height - 30);
     }
 
     @Override

@@ -53,12 +53,6 @@ public class World {
     public boolean update(float delta, Player player, OrthographicCamera camera) {
         player.update(delta);
 
-        /** Траблы с камерой */
-        if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
-            camera.position.x += 2;
-        else
-            camera.position.x += 5;
-
         /** На платформе ли */
         int onPl = 0;
         int height = Jumper.HEIGHT / 4;
@@ -93,6 +87,16 @@ public class World {
 
         player.plat(onPl, height, slider);
 
+        /** Траблы с камерой
+         if(player.position.x - camera.position.x < Jumper.WIDTH / 7)
+         camera.position.x += 2;
+         else
+         camera.position.x += 5;*/
+        if(onPl != 0 && camera.position.x - player.position.x < Jumper.WIDTH / 7)
+            camera.position.x += 5;
+        //if(onPl != 0 && player.position.x >= Jumper.WIDTH / 2)
+            //camera.position.x += player.position.x - camera.position.x + 200;
+
         /** check if dead */
         if(player.getPosition().y <= 0 || camera.position.x > player.position.x + Jumper.WIDTH)
             return true;
@@ -117,20 +121,22 @@ public class World {
     private void debug(SpriteBatch sb, BitmapFont font, OrthographicCamera camera, Player player) {
         font.draw(sb, " cameraX: " + camera.position.x,
                 camera.position.x - camera.viewportWidth / 2, 60);
+        font.draw(sb, " playerX: " + player.position.x,
+                camera.position.x - camera.viewportWidth / 2, 90);
 
         for(int i = 0; i < PLAT_COUNT; i++) {
-            font.draw(sb, "textX: " + platforms.get(i).getFrame().getX(), platforms.get(i).getPosition().x, 210);
+            //font.draw(sb, "textX: " + platforms.get(i).getFrame().getX(), platforms.get(i).getPosition().x, 210);
             font.draw(sb, "type: " + platforms.get(i).getType(), platforms.get(i).getPosition().x, 240);
 
-            font.draw(sb, "frameX: " + platforms.get(i).getFrame().x, platforms.get(i).getPosition().x, 270);
-            font.draw(sb, "frameY: " + platforms.get(i).getFrame().y, platforms.get(i).getPosition().x, 300);
+            //font.draw(sb, "frameX: " + platforms.get(i).getFrame().x, platforms.get(i).getPosition().x, 270);
+            //font.draw(sb, "frameY: " + platforms.get(i).getFrame().y, platforms.get(i).getPosition().x, 300);
         }
 
-        font.draw(sb, "playerSpdX: " + player.speed.x, camera.position.x + 50, 300);
-        font.draw(sb, "playerSpdY: " + player.speed.y, camera.position.x + 50, 330);
+        //font.draw(sb, "playerSpdX: " + player.speed.x, camera.position.x + 50, 300);
+        //font.draw(sb, "playerSpdY: " + player.speed.y, camera.position.x + 50, 330);
 
-        font.draw(sb, "width: " + Jumper.WIDTH, camera.position.x + 50, 360);
-        font.draw(sb, "height: " + Jumper.HEIGHT, camera.position.x + 50, 390);
+        //font.draw(sb, "width: " + Jumper.WIDTH, camera.position.x + 50, 360);
+        //font.draw(sb, "height: " + Jumper.HEIGHT, camera.position.x + 50, 390);
     }
 
     /** Метод для чистки памяти, юзаем сами при паузе или вызывается при звонке етц. */

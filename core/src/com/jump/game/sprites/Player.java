@@ -1,14 +1,21 @@
 package com.jump.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.jump.game.Jumper;
+
+import java.util.HashMap;
 
 /**
  * Created by jc on 25.05.16.
  */
 public class Player extends Objects {
+
+    private HashMap<String, TextureRegion> texture;
+    private TextureRegion currentTexture;
+    public TextureRegion getCurrentTexture() {return currentTexture;}
 
     private int gravity = -15;
 
@@ -23,8 +30,15 @@ public class Player extends Objects {
     public Player(int x, int y) {
         position = new Vector2(x, y);
         speed = new Vector2(0, 0);
-        texture = new Texture("player.png");
-        frame = new Rectangle(x, y, texture.getWidth(), texture.getHeight());
+
+        texture = new HashMap<String, TextureRegion>();
+        Texture valera = new Texture("player1.png");
+        texture.put("stand", new TextureRegion(valera, 0, 0, valera.getWidth() / 3, valera.getHeight()));
+        texture.put("up", new TextureRegion(valera, valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
+        texture.put("down", new TextureRegion(valera, 2 * valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
+        //texture = new Texture("player.png");
+        frame = new Rectangle(x - 40, y, valera.getWidth() / 3 - 40, valera.getHeight());
+        currentTexture = texture.get("stand");
     }
 
     @Override
@@ -61,30 +75,36 @@ public class Player extends Objects {
             speed.y = 0;
             speed.x = 0;
             position.y = h - 17;
+            currentTexture = texture.get("stand");
         }
         /** Для скользящих платформ */
         else if(onPl == 2 && position.y > wut && speed.y <= 0 && slider == 3) {
             gravity = 0;
             speed.y = 0;
             if(speed.x > 0)
-                speed.x -= 10;
+                speed.x -= 20;
             else
                 speed.x = 0;
             position.y = h - 17;
+            currentTexture = texture.get("stand");
         }
         /** Врезаться в платформу, если низко летел */
         else if(onPl == 1 && position.y < h - 20 && speed.y < 0 && speed.x > 0) {
-            position.x -= texture.getWidth() / 2;
+            position.x -= currentTexture.getTexture().getWidth() / 2;
             speed.x = -5;
+            currentTexture = texture.get("down");
         }
         /** Установить гравитацию при прыжке */
-        else if(position.y > h)
+        else if(position.y > h) {
             gravity = DEF_GRAV;
+            currentTexture = texture.get("up");
+        }
         /** Спрыгнуть (осталось от раннера) */
         else {
             gravity = DEF_GRAV;
             if(speed.y == 0)
                 speed.y = -450;
+            currentTexture = texture.get("down");
         }
     }
 
