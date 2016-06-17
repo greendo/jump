@@ -33,11 +33,11 @@ public class Player extends Objects {
 
         texture = new HashMap<String, TextureRegion>();
         Texture valera = new Texture("player1.png");
-        texture.put("stand", new TextureRegion(valera, 0, 0, valera.getWidth() / 3, valera.getHeight()));
-        texture.put("up", new TextureRegion(valera, valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
-        texture.put("down", new TextureRegion(valera, 2 * valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
+        texture.put("up", new TextureRegion(valera, 0, 0, valera.getWidth() / 3, valera.getHeight()));
+        texture.put("down", new TextureRegion(valera, valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
+        texture.put("stand", new TextureRegion(valera, 2 * valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
         //texture = new Texture("player.png");
-        frame = new Rectangle(x - 40, y, valera.getWidth() / 3 - 40, valera.getHeight());
+        frame = new Rectangle(x - 126 / 2, y, valera.getWidth() / 3 - (126 / 2), valera.getHeight());
         currentTexture = texture.get("stand");
     }
 
@@ -109,9 +109,9 @@ public class Player extends Objects {
     }
 
     public int collides(PlatformContainer platform) {
-        if(platform.getFrameLow().overlaps(frame))
+        if(platform.getPlatform().getFrameLow().overlaps(frame))
             return 1;
-        if(platform.getFrame().overlaps(frame))
+        if(platform.getPlatform().getFrame().overlaps(frame))
             return 2;
         return 0;
     }

@@ -7,13 +7,14 @@ package com.jump.game.sprites.platforms;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.jump.game.Jumper;
 import com.jump.game.sprites.Objects;
 
 import java.util.Random;
 
 /** Вложеный приватный класс для платформ */
-public class Platform extends Objects {
+public abstract class Platform extends Objects {
 
     /** Контроль интерактивной части текстур*/
     protected int GAP = 15;
@@ -25,7 +26,7 @@ public class Platform extends Objects {
     private int MIN_HOLE_WIDTH = Jumper.WIDTH / 7;
 
     /** Ширина для платформ и ям */
-    private int width;
+    protected int width;
     private int hole;
     /** Высота для платформ */
     protected int height;
@@ -42,6 +43,9 @@ public class Platform extends Objects {
 
     /** Для разброса по высоте */
     protected int lowGap;
+
+    /** Костыль для инди платформ */
+    protected TiledDrawable tile;
 
     public Platform(float x, String worldName) {
         touchEvent = false;
@@ -74,4 +78,5 @@ public class Platform extends Objects {
     public int getHeight() {return height;}
     public void setTouchEvent() {touchEvent = true;}
     public Rectangle getFrameLow() {return frameLow;}
+    public TiledDrawable getTile() {return tile;}
 }
