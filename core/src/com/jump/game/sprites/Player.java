@@ -37,7 +37,7 @@ public class Player extends Objects {
         texture.put("down", new TextureRegion(valera, valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
         texture.put("stand", new TextureRegion(valera, 2 * valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
         //texture = new Texture("player.png");
-        frame = new Rectangle(x - 126 / 2, y, valera.getWidth() / 3 - (126 / 2), valera.getHeight());
+        frame = new Rectangle(x, y, valera.getWidth() / 6, valera.getHeight() / 2);
         currentTexture = texture.get("stand");
     }
 
@@ -90,7 +90,7 @@ public class Player extends Objects {
         }
         /** Врезаться в платформу, если низко летел */
         else if(onPl == 1 && position.y < h - 20 && speed.y < 0 && speed.x > 0) {
-            position.x -= currentTexture.getTexture().getWidth() / 2;
+            position.x -= currentTexture.getTexture().getWidth() / 16;
             speed.x = -5;
             currentTexture = texture.get("down");
         }

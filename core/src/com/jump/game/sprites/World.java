@@ -95,7 +95,7 @@ public class World {
          camera.position.x += 2;
          else
          camera.position.x += 5;*/
-        if(onPl != 0 && camera.position.x - player.position.x < Jumper.WIDTH / 7)
+        if(camera.position.x - player.position.x < Jumper.WIDTH / 8)
             camera.position.x += 5;
 
         /** check if dead */

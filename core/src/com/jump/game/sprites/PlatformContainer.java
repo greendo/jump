@@ -1,8 +1,5 @@
 package com.jump.game.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.jump.game.sprites.platforms.Platform;
 import com.jump.game.sprites.platforms.PlatformCollapse;
 import com.jump.game.sprites.platforms.PlatformGrow;

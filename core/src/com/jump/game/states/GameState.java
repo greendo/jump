@@ -56,7 +56,8 @@ public class GameState extends State {
         sb.begin();
 
         world.render(sb, font, camera, player);
-        sb.draw(player.getCurrentTexture(), player.getPosition().x, player.getPosition().y);
+        sb.draw(player.getCurrentTexture(), player.getPosition().x, player.getPosition().y,
+                player.getCurrentTexture().getRegionWidth() / 2, player.getCurrentTexture().getRegionHeight() / 2);
 
         sb.end();
     }
