@@ -20,6 +20,9 @@ public class Jumper extends ApplicationAdapter {
 	/** screen */
 	public static int WIDTH, HEIGHT;
 
+	/** settings */
+	public static GameVars gameVars = GameVars.getGameVars();
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();

@@ -10,12 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
  */
 public class PlatformSimple extends Platform {
 
-    public PlatformSimple(float x, String worldName) {
+    public PlatformSimple(float x, String worldName, int playerIndex) {
         super(x, worldName);
 
-        Texture valera = new Texture(worldName + "/platUnique1.png");
+        Texture valera = new Texture(worldName + "/platUnique" + playerIndex + ".png");
 
         int fixWidth = width / valera.getWidth();
+        if(fixWidth == 1)
+            fixWidth = 2;
         int fixHeight = height / valera.getHeight();
 
         width = fixWidth * valera.getWidth();
@@ -28,7 +30,7 @@ public class PlatformSimple extends Platform {
         TextureRegion mosaic = new TextureRegion(valera);
         tile = new TiledDrawable(mosaic);
 
-        texture = new Texture(worldName + "/hatUnique1.png");
+        texture = new Texture(worldName + "/hatUnique" + playerIndex + ".png");
     }
 
     public TiledDrawable getTile() {return tile;}

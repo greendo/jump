@@ -15,11 +15,13 @@ public class PlatformContainer {
 
     private Platform platform;
     private String worldName;
+    private int playerIndex;
 
-    public PlatformContainer(float x, String worldName) {
+    public PlatformContainer(float x, String worldName, int playerIndex) {
         this.worldName = worldName;
+        this.playerIndex = playerIndex;
 
-        platform = new PlatformSimple(x, worldName);
+        platform = new PlatformSimple(x, worldName, playerIndex);
     }
 
     public void reInit(float x) {
@@ -27,7 +29,7 @@ public class PlatformContainer {
 
         switch (random.nextInt(4)) {
             case 0:
-                platform = new PlatformSimple(x, worldName);
+                platform = new PlatformSimple(x, worldName, playerIndex);
                 break;
             case 1:
                 platform = new PlatformCollapse(x, worldName);

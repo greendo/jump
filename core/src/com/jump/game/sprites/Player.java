@@ -27,12 +27,12 @@ public class Player extends Objects {
     public static final float JUMP_X_MAX = (float) (Jumper.WIDTH / 1.3);
     public static final float JUMP_Y_MAX = (float) (Jumper.HEIGHT / 0.75);
 
-    public Player(int x, int y) {
+    public Player(int world, int player, int x, int y) {
         position = new Vector2(x, y);
         speed = new Vector2(0, 0);
 
         texture = new HashMap<String, TextureRegion>();
-        Texture valera = new Texture("player1.png");
+        Texture valera = new Texture("world" + world + "/player" + player + ".png");
         texture.put("up", new TextureRegion(valera, 0, 0, valera.getWidth() / 3, valera.getHeight()));
         texture.put("down", new TextureRegion(valera, valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
         texture.put("stand", new TextureRegion(valera, 2 * valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));

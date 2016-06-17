@@ -10,39 +10,39 @@ import com.jump.game.Jumper;
 import com.jump.game.sprites.platforms.PlatformSimple;
 import com.jump.game.sprites.platforms.PlatformSlide;
 
-import java.util.Random;
 
 /**
  * Created by jc on 02.06.16.
  */
 public class World {
 
-    /** Кол-во платформ и фонов в памяти */
+    /** Кол-во платформ в памяти */
     public static final int PLAT_COUNT = 3;
 
+    /** Счет и рекорд */
+    private int score = 0;
+    public int getScore() {return score;}
+    private int record = Jumper.gameVars.getRecord();
+
     /** Имя мира */
-    private String worldName;
     private Texture texture;
-    private Random rand;
     protected static boolean debug;
     /** Платформы */
     private Array<PlatformContainer> platforms;
 
-    public World(String worldName, boolean debug) {
-        this.worldName = worldName;
-        texture = new Texture(worldName + "/back1.png");
-        rand = new Random();
+    public World(String worldName, boolean debug, int playerIndex) {
+        texture = new Texture(worldName + "/back.png");
         platforms = new Array<PlatformContainer>();
         this.debug = debug;
 
         for(int i = 0; i < PLAT_COUNT; i++) {
             if(i == 0)
-                platforms.add(new PlatformContainer(0, worldName));
+                platforms.add(new PlatformContainer(0, worldName, playerIndex));
             else
                 platforms.add(new PlatformContainer(platforms.get(i - 1).getPlatform().getPosition().x +
                 + platforms.get(i - 1).getPlatform().getWidth() +
                 + platforms.get(i - 1).getPlatform().getHole(),
-                        worldName));
+                        worldName, playerIndex));
         }
     }
 
@@ -86,6 +86,10 @@ public class World {
                 pc.getPlatform().setTouchEvent();
                 if(pc.getPlatform() instanceof PlatformSlide)
                     slider = 3;
+                if(!pc.getPlatform().mount && player.collides(pc) == 2) {
+                    pc.getPlatform().mount = true;
+                    score++;
+                }
             }
 
         player.plat(onPl, height, slider);
@@ -95,7 +99,7 @@ public class World {
          camera.position.x += 2;
          else
          camera.position.x += 5;*/
-        if(camera.position.x - player.position.x < Jumper.WIDTH / 8)
+        if(camera.position.x - player.position.x < Jumper.WIDTH / 3)
             camera.position.x += 5;
 
         /** check if dead */
@@ -129,6 +133,12 @@ public class World {
                 sb.draw(wm.getPlatform().getTexture(), wm.getPlatform().getPosition().x, wm.getPlatform().getPosition().y,
                         wm.getPlatform().getWidth(), wm.getPlatform().getHeight());
         }
+
+        /** Счет и рекорд */
+        font.draw(sb, "score: " + score, camera.position.x - Jumper.WIDTH / 2 + 10, Jumper.HEIGHT - 10);
+        if(record < score)
+            record = score;
+        font.draw(sb, "record: " + record, camera.position.x - Jumper.WIDTH / 2 + 10, Jumper.HEIGHT - 40);
 
         if(debug)
             debug(sb, font, camera, player);

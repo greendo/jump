@@ -1,5 +1,6 @@
 package com.jump.game.sprites.platforms;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.jump.game.Jumper;
 
 /**
@@ -9,6 +10,7 @@ public class PlatformCollapse extends Platform {
 
     public PlatformCollapse(float x, String worldName) {
         super(x, worldName);
+        texture = new Texture(worldName + "/collapse.png");
         speed.y = -1;
     }
 

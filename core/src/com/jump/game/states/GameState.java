@@ -13,17 +13,23 @@ import java.util.Random;
 
 public class GameState extends State {
 
+    private boolean debug = true;
+
     private World world;
     private Player player;
-    private boolean debug = true;
-    private Random rand = new Random();
+    private int worldIndex;
+    private int playerIndex;
 
     public GameState(StateManager sm) {
         super(sm);
+
+        worldIndex = 0;
+        playerIndex = 1;
+
         camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
 
-        player = new Player(50, Jumper.HEIGHT / 3 + 50);
-        world = new World("test", debug);
+        player = new Player(worldIndex, playerIndex, 50, Jumper.HEIGHT / 3 + 50);
+        world = new World("world" + worldIndex, debug, playerIndex);
 
         /** for swipes */
         Gdx.input.setInputProcessor(new ActionController(player));
@@ -43,8 +49,10 @@ public class GameState extends State {
     public void update(float delta) {
         handleInput();
 
-        if(world.update(delta, player, camera) || player.getPosition().y >= Jumper.HEIGHT)
+        if(world.update(delta, player, camera) || player.getPosition().y >= Jumper.HEIGHT) {
+            Jumper.gameVars.setRecord(world.getScore());
             sManager.init(new DeathState(sManager));
+        }
 
         camera.update();
     }

@@ -16,6 +16,9 @@ import java.util.Random;
 /** Вложеный приватный класс для платформ */
 public abstract class Platform extends Objects {
 
+    /** Счет */
+    public boolean mount = false;
+
     /** Контроль интерактивной части текстур*/
     protected int GAP = 15;
 
@@ -51,7 +54,6 @@ public abstract class Platform extends Objects {
         touchEvent = false;
         this.worldName = worldName;
         Random rand = new Random();
-        texture = new Texture(worldName + "/plat1.png");
         position = new Vector2(x, 0);
         speed = new Vector2(0, 0);
 
