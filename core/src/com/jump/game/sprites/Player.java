@@ -1,5 +1,6 @@
 package com.jump.game.sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -75,7 +76,6 @@ public class Player extends Objects {
             speed.y = 0;
             speed.x = 0;
             position.y = h - 17;
-            currentTexture = texture.get("stand");
         }
         /** Для скользящих платформ */
         else if(onPl == 2 && position.y > wut && speed.y <= 0 && slider == 3) {
@@ -86,7 +86,6 @@ public class Player extends Objects {
             else
                 speed.x = 0;
             position.y = h - 17;
-            currentTexture = texture.get("stand");
         }
         /** Врезаться в платформу, если низко летел */
         else if(onPl == 1 && position.y < h - 20 && speed.y < 0 && speed.x > 0) {
@@ -108,11 +107,27 @@ public class Player extends Objects {
         }
     }
 
-    public int collides(PlatformContainer platform) {
+    /** Пусть будет метод для перекадровки извне */
+    public void setCurrentTexture(String current) {
+        try {
+            currentTexture = texture.get(current);
+        }
+        catch(NullPointerException e) {
+            Gdx.app.error("Player", "setCurrentTexture received invalid String key");
+        }
+    }
+
+    public int collidesPlat(PlatformContainer platform) {
         if(platform.getPlatform().getFrameLow().overlaps(frame))
             return 1;
         if(platform.getPlatform().getFrame().overlaps(frame))
             return 2;
         return 0;
+    }
+
+    public boolean collidesCoin(PlatformContainer platform) {
+        if(platform.getCoin().getFrame().overlaps(frame))
+            return true;
+        return false;
     }
 }

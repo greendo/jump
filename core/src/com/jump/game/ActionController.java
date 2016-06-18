@@ -11,6 +11,7 @@ public class ActionController implements InputProcessor {
 
     private Vector2 positionStart, positionFin;
     private Player player;
+    public static boolean touched = false;
 
     public ActionController(Player player) {
         this.player = player;
@@ -22,6 +23,8 @@ public class ActionController implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         positionStart.x = screenX;
         positionStart.y = -1 * screenY;
+        player.setCurrentTexture("down");
+        touched = true;
         return true;
     }
 
@@ -34,6 +37,7 @@ public class ActionController implements InputProcessor {
             positionFin.x = 0;
 
         player.jump(positionFin);
+        touched = false;
         return true;
     }
 

@@ -51,6 +51,7 @@ public class GameState extends State {
 
         if(world.update(delta, player, camera) || player.getPosition().y >= Jumper.HEIGHT) {
             Jumper.gameVars.setRecord(world.getScore());
+            Jumper.gameVars.setCoins(world.getCoins());
             sManager.init(new DeathState(sManager));
         }
 

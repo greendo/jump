@@ -16,11 +16,12 @@ public class PlatformContainer {
     private Platform platform;
     private String worldName;
     private int playerIndex;
+    private Coin coin;
 
     public PlatformContainer(float x, String worldName, int playerIndex) {
         this.worldName = worldName;
         this.playerIndex = playerIndex;
-
+        coin = null;
         platform = new PlatformSimple(x, worldName, playerIndex);
     }
 
@@ -41,7 +42,15 @@ public class PlatformContainer {
                 platform = new PlatformSlide(x, worldName);
                 break;
         }
+
+        if(random.nextInt(10) == 5)
+            coin = new Coin((int) (platform.getPosition().x + platform.getWidth() / 2),
+                    platform.getHeight() + Coin.size * 4);
+        else
+            coin = null;
     }
 
     public Platform getPlatform() {return platform;}
+    public Coin getCoin() {return coin;}
+    public void setCoinToNull() {coin = null;}
 }

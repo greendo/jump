@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.jump.game.ActionController;
 import com.jump.game.Jumper;
 import com.jump.game.sprites.platforms.PlatformSimple;
 import com.jump.game.sprites.platforms.PlatformSlide;
@@ -19,10 +20,12 @@ public class World {
     /** Кол-во платформ в памяти */
     public static final int PLAT_COUNT = 3;
 
-    /** Счет и рекорд */
+    /** Счет, рекорд и монеты */
     private int score = 0;
     public int getScore() {return score;}
     private int record = Jumper.gameVars.getRecord();
+    private int coins = Jumper.gameVars.getCoins();
+    public int getCoins() {return coins;}
 
     /** Имя мира */
     private Texture texture;
@@ -55,6 +58,10 @@ public class World {
     /** Репозиция и реинициализация обьектов, если они ушли за экран влево */
     public boolean update(float delta, Player player, OrthographicCamera camera) {
         player.update(delta);
+        for(PlatformContainer pc : platforms) {
+            if(pc.getCoin() != null)
+                pc.getCoin().update(delta, pc.getPlatform());
+        }
 
         /** На платформе ли */
         int onPl = 0;
@@ -80,16 +87,27 @@ public class World {
         }
 
         for(PlatformContainer pc : platforms)
-            if(player.collides(pc) != 0) {
-                onPl = player.collides(pc);
+            if(player.collidesPlat(pc) != 0) {
+                onPl = player.collidesPlat(pc);
                 height = pc.getPlatform().getHeight();
                 pc.getPlatform().setTouchEvent();
+                /** Для скользящих */
                 if(pc.getPlatform() instanceof PlatformSlide)
                     slider = 3;
-                if(!pc.getPlatform().mount && player.collides(pc) == 2) {
+                /** Для НЕдублирования очков */
+                if(!pc.getPlatform().mount && player.collidesPlat(pc) == 2) {
                     pc.getPlatform().mount = true;
                     score++;
                 }
+                /** Для установки анимации на платформе, если палец не на экране */
+                if(!ActionController.touched)
+                    player.setCurrentTexture("stand");
+                /** Для монет */
+                if(pc.getCoin() != null)
+                    if(player.collidesCoin(pc)) {
+                        pc.setCoinToNull();
+                        coins++;
+                    }
             }
 
         player.plat(onPl, height, slider);
@@ -115,30 +133,35 @@ public class World {
         /** Задний фон */
         sb.draw(texture, camera.position.x - camera.viewportWidth / 2, 0, Jumper.WIDTH, Jumper.HEIGHT);
 
-        for(PlatformContainer wm : platforms) {
-            if(wm.getPlatform() instanceof PlatformSimple) {
+        for(PlatformContainer pc : platforms) {
+            if(pc.getPlatform() instanceof PlatformSimple) {
                 try {
-                    wm.getPlatform().getTile().draw(sb, wm.getPlatform().getPosition().x, wm.getPlatform().getPosition().y,
-                            wm.getPlatform().getWidth(), wm.getPlatform().getHeight());
+                    pc.getPlatform().getTile().draw(sb, pc.getPlatform().getPosition().x, pc.getPlatform().getPosition().y,
+                            pc.getPlatform().getWidth(), pc.getPlatform().getHeight());
 
-                    sb.draw(wm.getPlatform().getTexture(), wm.getPlatform().getPosition().x - 10, wm.getPlatform().getHeight() + 10 - wm.getPlatform().getTexture().getHeight(),
-                            wm.getPlatform().getWidth() + 20, wm.getPlatform().getTexture().getHeight());
+                    sb.draw(pc.getPlatform().getTexture(), pc.getPlatform().getPosition().x - 10, pc.getPlatform().getHeight() + 10 - pc.getPlatform().getTexture().getHeight(),
+                            pc.getPlatform().getWidth() + 20, pc.getPlatform().getTexture().getHeight());
                 }
                 catch (NullPointerException e) {
                     Gdx.app.error("Platform", "indi platform method was called from platform: " +
-                            wm.getPlatform().getClass().getName(), e);
+                            pc.getPlatform().getClass().getName(), e);
                 }
             }
             else
-                sb.draw(wm.getPlatform().getTexture(), wm.getPlatform().getPosition().x, wm.getPlatform().getPosition().y,
-                        wm.getPlatform().getWidth(), wm.getPlatform().getHeight());
+                sb.draw(pc.getPlatform().getTexture(), pc.getPlatform().getPosition().x, pc.getPlatform().getPosition().y,
+                        pc.getPlatform().getWidth(), pc.getPlatform().getHeight());
+
+            if(pc.getCoin() != null)
+                sb.draw(pc.getCoin().getTexture(), pc.getCoin().getPosition().x, pc.getCoin().getPosition().y,
+                        pc.getCoin().getSize(), pc.getCoin().getSize());
         }
 
-        /** Счет и рекорд */
+        /** Счет, монеты и рекорд */
         font.draw(sb, "score: " + score, camera.position.x - Jumper.WIDTH / 2 + 10, Jumper.HEIGHT - 10);
         if(record < score)
             record = score;
         font.draw(sb, "record: " + record, camera.position.x - Jumper.WIDTH / 2 + 10, Jumper.HEIGHT - 40);
+        font.draw(sb, "coins: " + coins, camera.position.x + Jumper.WIDTH / 2 - 60, Jumper.HEIGHT - 10);
 
         if(debug)
             debug(sb, font, camera, player);
@@ -154,13 +177,22 @@ public class World {
         for(int i = 0; i < PLAT_COUNT; i++) {
             font.draw(sb, "type: " + platforms.get(i).getPlatform().getClass().getName(),
                     platforms.get(i).getPlatform().getPosition().x, 240);
+            if(platforms.get(i).getCoin() != null) {
+                font.draw(sb, "coinX: " + platforms.get(i).getCoin().getPosition().x,
+                        camera.position.x - camera.viewportWidth / 2 + i * 100, 300);
+                font.draw(sb, "coinY: " + platforms.get(i).getCoin().getPosition().y,
+                        camera.position.x - camera.viewportWidth / 2 + i * 100, 330);
+            }
         }
     }
 
     /** Метод для чистки памяти, юзаем сами при паузе или вызывается при звонке етц. */
     public void dispose() {
         texture.dispose();
-        for(PlatformContainer wp : platforms)
-            wp.getPlatform().getTexture().dispose();
+        for(PlatformContainer pc : platforms) {
+            pc.getPlatform().getTexture().dispose();
+            if(pc.getCoin() != null)
+                pc.getCoin().getTexture().dispose();
+        }
     }
 }
