@@ -34,11 +34,12 @@ public class Player extends Objects {
 
         texture = new HashMap<String, TextureRegion>();
         Texture valera = new Texture("world" + world + "/player" + player + ".png");
-        texture.put("up", new TextureRegion(valera, 0, 0, valera.getWidth() / 3, valera.getHeight()));
-        texture.put("down", new TextureRegion(valera, valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
-        texture.put("stand", new TextureRegion(valera, 2 * valera.getWidth() / 3, 0, valera.getWidth() / 3, valera.getHeight()));
+        texture.put("stand", new TextureRegion(valera, 0, 0, valera.getWidth() / 4, valera.getHeight()));
+        texture.put("down", new TextureRegion(valera, valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
+        texture.put("up", new TextureRegion(valera, 2 * valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
+        texture.put("slide", new TextureRegion(valera, 3 * valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
         //texture = new Texture("player.png");
-        frame = new Rectangle(x, y, valera.getWidth() / 6, valera.getHeight() / 2);
+        frame = new Rectangle(x, y, valera.getWidth() / 8, valera.getHeight() / 2);
         currentTexture = texture.get("stand");
     }
 

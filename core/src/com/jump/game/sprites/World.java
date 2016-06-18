@@ -99,8 +99,11 @@ public class World {
                     pc.getPlatform().mount = true;
                     score++;
                 }
+                /** Для скольжения */
+                if(slider == 3 && player.speed.x != 0)
+                    player.setCurrentTexture("slide");
                 /** Для установки анимации на платформе, если палец не на экране */
-                if(!ActionController.touched)
+                else if(!ActionController.touched)
                     player.setCurrentTexture("stand");
                 /** Для монет */
                 if(pc.getCoin() != null)

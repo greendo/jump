@@ -23,8 +23,8 @@ public class GameState extends State {
     public GameState(StateManager sm) {
         super(sm);
 
-        worldIndex = 0;
-        playerIndex = 1;
+        worldIndex = 1;
+        playerIndex = 2;
 
         camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
 
