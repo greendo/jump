@@ -1,6 +1,7 @@
 package com.jump.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 
 /**
  * Created by jc on 17.06.16.
@@ -28,20 +29,23 @@ public class GameVars {
     }
 
     public void setRecord(int record) {
+
+        Preferences prefs = Gdx.app.getPreferences("Jumper");
+
         try {
-            if(record > Gdx.app.getPreferences("Jumper").getInteger("record")) {
-                Gdx.app.getPreferences("Jumper").putInteger("record", record);
+            if(record > prefs.getInteger("record")) {
+                prefs.putInteger("record", record);
                 Gdx.app.error("record", "try score > record");
             }
             else
                 Gdx.app.error("record", "try score <= record");
         }
         catch(NullPointerException e) {
-            Gdx.app.getPreferences("Jumper").putInteger("record", record);
+            prefs.putInteger("record", record);
             Gdx.app.error("record", "catch nptr");
         }
         finally {
-            Gdx.app.getPreferences("Jumper").flush();
+            prefs.flush();
             Gdx.app.error("record", "finally flushed");
         }
     }
