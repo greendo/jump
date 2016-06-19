@@ -2,17 +2,38 @@ package com.jump.game;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.jump.game.states.ChoosePlayerState;
+
+import java.util.HashMap;
 
 /**
  * Created by jc on 18.06.16.
  */
 public class ChoosePlayerController implements InputProcessor {
 
-    Rectangle r;
+    private HashMap<Integer, Rectangle> players;
+    private ChoosePlayerState cps;
+
+    public ChoosePlayerController(HashMap<Integer, Rectangle> players, ChoosePlayerState cps) {
+        this.players = players;
+        this.cps = cps;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector2 valera = new Vector2(screenX, screenY);
+
+        for(int i = 1; i <= players.size(); i++) {
+            if(players.get(i).contains(valera))
+                cps.createWorld(i);
+        }
+
+        return true;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
-        //r.contains()
         return false;
     }
 
@@ -23,11 +44,6 @@ public class ChoosePlayerController implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         return false;
     }
 

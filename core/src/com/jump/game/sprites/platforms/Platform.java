@@ -4,7 +4,6 @@ package com.jump.game.sprites.platforms;
  * Created by jc on 07.06.16.
  */
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
@@ -25,8 +24,8 @@ public abstract class Platform extends Objects {
     /** Минимальная и максимальная ширина для платформ и ям */
     private int MAX_PLAT_WIDTH = Jumper.WIDTH / 4;
     private int MIN_PLAT_WIDTH = Jumper.WIDTH / 5;
-    private int MAX_HOLE_WIDTH = Jumper.WIDTH / 6;
-    private int MIN_HOLE_WIDTH = Jumper.WIDTH / 7;
+    private int MAX_HOLE_WIDTH = Jumper.WIDTH / 6 + 50;
+    private int MIN_HOLE_WIDTH = Jumper.WIDTH / 7 + 50;
 
     /** Ширина для платформ и ям */
     protected int width;

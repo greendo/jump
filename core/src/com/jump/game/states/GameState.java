@@ -20,11 +20,11 @@ public class GameState extends State {
     private int worldIndex;
     private int playerIndex;
 
-    public GameState(StateManager sm) {
+    public GameState(StateManager sm, int worldIndex, int playerIndex) {
         super(sm);
 
-        worldIndex = 1;
-        playerIndex = 2;
+        this.worldIndex = worldIndex;
+        this.playerIndex = playerIndex;
 
         camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
 
@@ -40,7 +40,7 @@ public class GameState extends State {
     @Override
     protected void handleInput() {
         if(Gdx.input.isKeyPressed(Input.Keys.R))
-            sManager.init(new GameState(sManager));
+            sManager.init(new ChoosePlayerState(sManager));
 //        if(Gdx.input.justTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY))
 //            player.jump();
     }

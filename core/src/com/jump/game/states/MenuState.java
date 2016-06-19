@@ -21,7 +21,7 @@ public class MenuState extends State {
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY))
-            sManager.init(new GameState(sManager));
+            sManager.init(new ChoosePlayerState(sManager));
     }
 
     @Override
