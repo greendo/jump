@@ -30,15 +30,19 @@ public class PlatformContainer {
 
         switch (random.nextInt(4)) {
             case 0:
+                platform = null;
                 platform = new PlatformSimple(x, worldName, playerIndex);
                 break;
             case 1:
+                platform = null;
                 platform = new PlatformCollapse(x, worldName);
                 break;
             case 2:
+                platform = null;
                 platform = new PlatformGrow(x, worldName);
                 break;
             case 3:
+                platform = null;
                 platform = new PlatformSlide(x, worldName);
                 break;
         }

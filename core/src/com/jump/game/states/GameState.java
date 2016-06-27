@@ -32,7 +32,9 @@ public class GameState extends State {
         world = new World("world" + worldIndex, debug, playerIndex);
 
         /** for swipes */
-        Gdx.input.setInputProcessor(new ActionController(player));
+        Gdx.input.setInputProcessor(new ActionController(player, this));
+        //Gdx.input.setCatchBackKey(true);
+        //Gdx.input.setCatchMenuKey(true);
     }
 
     private void pause() {sManager.init(new PauseState(sManager, this));}
@@ -41,8 +43,8 @@ public class GameState extends State {
     protected void handleInput() {
         if(Gdx.input.isKeyPressed(Input.Keys.R))
             sManager.init(new ChoosePlayerState(sManager));
-//        if(Gdx.input.justTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY))
-//            player.jump();
+//        if(Gdx.input.isKeyPressed(Input.Keys.P))
+//            sManager.init(new PauseState(sManager, this));
     }
 
     @Override
@@ -52,6 +54,9 @@ public class GameState extends State {
         if(world.update(delta, player, camera) || player.getPosition().y >= Jumper.HEIGHT) {
             Jumper.gameVars.setRecord(world.getScore());
             Jumper.gameVars.setCoins(world.getCoins());
+            /** Вроде тут должны прекратиться вылеты */
+            dispose();
+            /** Ибо на дроиде жабаколлектор не чистит текстуры, емнип */
             sManager.init(new DeathState(sManager));
         }
 
@@ -76,4 +81,7 @@ public class GameState extends State {
         player.getTexture().dispose();
         world.dispose();
     }
+
+    @Override
+    public void continueGame() {}
 }

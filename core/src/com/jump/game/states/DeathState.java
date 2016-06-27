@@ -57,4 +57,7 @@ public class DeathState extends State {
 
     @Override
     public void dispose() {}
+
+    @Override
+    public void continueGame() {}
 }

@@ -20,12 +20,16 @@ public abstract class State {
         this.sManager = sm;
     }
 
-    //controls
+    /** controls */
     protected abstract void handleInput();
-    //update screen
+    /** update screen */
     public abstract void update(float delta);
-    //draw
+    /** draw */
     public abstract void render(SpriteBatch sb, BitmapFont font);
-    //free mmr
+    /** free mmr */
     public abstract void dispose();
+    /** for pause */
+    public abstract void continueGame();
+
+    public StateManager getsManager() {return sManager;}
 }

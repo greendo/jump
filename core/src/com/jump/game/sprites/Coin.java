@@ -1,6 +1,5 @@
 package com.jump.game.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.jump.game.sprites.platforms.Platform;
@@ -15,7 +14,7 @@ public class Coin extends Objects {
     public int getSize() {return size;}
 
     public Coin(int x, int y) {
-        texture = new Texture("coin.png");
+        texture = World.coin;
         frame = new Rectangle(x, y, size, size);
         position = new Vector2(x, y);
         speed = new Vector2(0, 200);

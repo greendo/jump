@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jump.game.states.PauseState;
 import com.jump.game.states.StateManager;
 
 public class Jumper extends ApplicationAdapter {
@@ -19,11 +20,19 @@ public class Jumper extends ApplicationAdapter {
 	/** screen */
 	public static int WIDTH, HEIGHT;
 
+	/** pause and resume */
+	public static boolean PAUSE = false;
+
 	/** settings */
 	public static GameVars gameVars = GameVars.getGameVars();
 
 	@Override
 	public void create() {
+		/** for future menu controller? */
+		//Gdx.input.setInputProcessor(new ActionController(player, this));
+		Gdx.input.setCatchBackKey(true);
+		Gdx.input.setCatchMenuKey(true);
+
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		WIDTH = Gdx.graphics.getWidth();
@@ -39,12 +48,28 @@ public class Jumper extends ApplicationAdapter {
 		//Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		sm.update(Gdx.graphics.getDeltaTime());
+		if(!PAUSE)
+			sm.update(Gdx.graphics.getDeltaTime());
 		sm.render(batch, font);
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+		sm.getState().dispose();
+	}
+
+	@Override
+	public void pause() {
+		PAUSE = true;
+		Gdx.app.error("pause", "was called from Jumper.java");
+		sm.init(new PauseState(sm, sm.getState()));
+	}
+
+	@Override
+	public void resume() {
+		PAUSE = false;
+		Gdx.app.error("resume", "was called from Jumper.java");
+		sm.getState().continueGame();
 	}
 }

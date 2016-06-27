@@ -45,7 +45,10 @@ public class ChoosePlayerState extends State {
 
 
     /** Метод для создания мира */
-    public void createWorld(int playerIndex) {sManager.init(new GameState(sManager, currentWorld, playerIndex));}
+    public void createWorld(int playerIndex) {
+        dispose();
+        sManager.init(new GameState(sManager, currentWorld, playerIndex));
+    }
 
 
     private class WorldSelectPlayer {
@@ -61,7 +64,7 @@ public class ChoosePlayerState extends State {
             backChoise = new Texture(worldName + "backChoise.png");
 
             /** count player characters */
-            int playerCount = 2;
+            int playerCount = 3;
 
             int valeraa = (Jumper.WIDTH - 5 * width) / 6;
 
@@ -127,4 +130,7 @@ public class ChoosePlayerState extends State {
             }
         }
     }
+
+    @Override
+    public void continueGame() {}
 }

@@ -36,4 +36,7 @@ public class MenuState extends State {
 
     @Override
     public void dispose() {}
+
+    @Override
+    public void continueGame() {}
 }

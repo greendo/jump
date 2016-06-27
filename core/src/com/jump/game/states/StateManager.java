@@ -14,8 +14,9 @@ public class StateManager {
 
     public void init(State state) {this.state = state;}
 
-    //draw scr
+    /** draw screen */
     public void render(SpriteBatch sb, BitmapFont font) {state.render(sb, font);}
-
+    /** update screen */
     public void update(float delta) {state.update(delta);}
+    public State getState() {return state;}
 }

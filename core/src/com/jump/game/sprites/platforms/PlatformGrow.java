@@ -1,7 +1,7 @@
 package com.jump.game.sprites.platforms;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.jump.game.Jumper;
+import com.jump.game.sprites.World;
 
 /**
  * Created by jc on 07.06.16.
@@ -10,7 +10,7 @@ public class PlatformGrow extends Platform {
 
     public PlatformGrow(float x, String worldName) {
         super(x, worldName);
-        texture = new Texture(worldName + "/grow.png");
+        texture = World.pGrow;
         speed.y = 1;
     }
 

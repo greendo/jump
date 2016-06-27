@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.jump.game.ActionController;
 import com.jump.game.Jumper;
@@ -27,6 +29,10 @@ public class World {
     private int coins = Jumper.gameVars.getCoins();
     public int getCoins() {return coins;}
 
+    /** Мб перестанет вылетать */
+    public static Texture pSimple, pSlide, pCollapse, pGrow, coin;
+    public static TiledDrawable tSimple;
+
     /** Имя мира */
     private Texture texture;
     protected static boolean debug;
@@ -37,6 +43,18 @@ public class World {
         texture = new Texture(worldName + "/back.png");
         platforms = new Array<PlatformContainer>();
         this.debug = debug;
+
+
+        tSimple = new TiledDrawable(
+                new TextureRegion(new Texture(worldName + "/platUnique" + playerIndex + ".png"))
+        );
+        pSimple = new Texture(worldName + "/hatUnique" + playerIndex + ".png");
+        pGrow = new Texture(worldName + "/grow.png");
+        pCollapse = new Texture(worldName + "/collapse.png");
+        pSlide = new Texture(worldName + "/slide.png");
+        coin = new Texture("coin.png");
+
+
 
         for(int i = 0; i < PLAT_COUNT; i++) {
             if(i == 0)
@@ -151,8 +169,13 @@ public class World {
                 }
             }
             else
-                sb.draw(pc.getPlatform().getTexture(), pc.getPlatform().getPosition().x, pc.getPlatform().getPosition().y,
-                        pc.getPlatform().getWidth(), pc.getPlatform().getHeight());
+                try {
+                    sb.draw(pc.getPlatform().getTexture(), pc.getPlatform().getPosition().x, pc.getPlatform().getPosition().y,
+                            pc.getPlatform().getWidth(), pc.getPlatform().getHeight());
+                }
+                catch (NullPointerException e) {
+                    Gdx.app.error("Platform", "couldn't render " + pc.getPlatform().getClass().getName(), e);
+                }
 
             if(pc.getCoin() != null)
                 sb.draw(pc.getCoin().getTexture(), pc.getCoin().getPosition().x, pc.getCoin().getPosition().y,
@@ -176,10 +199,20 @@ public class World {
                 camera.position.x - camera.viewportWidth / 2, 60);
         font.draw(sb, " playerX: " + player.position.x,
                 camera.position.x - camera.viewportWidth / 2, 90);
+        font.draw(sb, " playerY: " + player.position.y,
+                camera.position.x - camera.viewportWidth / 2, 120);
+        font.draw(sb, " playerSpdX: " + player.speed.x,
+                camera.position.x - camera.viewportWidth / 2, 150);
+        font.draw(sb, " playerSpdY: " + player.speed.y,
+                camera.position.x - camera.viewportWidth / 2, 180);
 
         for(int i = 0; i < PLAT_COUNT; i++) {
             font.draw(sb, "type: " + platforms.get(i).getPlatform().getClass().getName(),
                     platforms.get(i).getPlatform().getPosition().x, 240);
+
+            font.draw(sb, "posX: " + platforms.get(i).getPlatform().position.x,
+                    platforms.get(i).getPlatform().getPosition().x, 270);
+
             if(platforms.get(i).getCoin() != null) {
                 font.draw(sb, "coinX: " + platforms.get(i).getCoin().getPosition().x,
                         camera.position.x - camera.viewportWidth / 2 + i * 100, 300);
@@ -192,10 +225,11 @@ public class World {
     /** Метод для чистки памяти, юзаем сами при паузе или вызывается при звонке етц. */
     public void dispose() {
         texture.dispose();
-        for(PlatformContainer pc : platforms) {
-            pc.getPlatform().getTexture().dispose();
-            if(pc.getCoin() != null)
-                pc.getCoin().getTexture().dispose();
-        }
+        pSimple.dispose();
+        pSlide.dispose();
+        pCollapse.dispose();
+        pGrow.dispose();
+        coin.dispose();
+        tSimple.getRegion().getTexture().dispose();
     }
 }
