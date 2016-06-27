@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class Player extends Objects {
 
-    private HashMap<String, TextureRegion> texture;
+    private HashMap<String, TextureRegion> playerTextures;
     private TextureRegion currentTexture;
     public TextureRegion getCurrentTexture() {return currentTexture;}
 
@@ -32,15 +32,15 @@ public class Player extends Objects {
         position = new Vector2(x, y);
         speed = new Vector2(0, 0);
 
-        texture = new HashMap<String, TextureRegion>();
+        playerTextures = new HashMap<String, TextureRegion>();
         Texture valera = new Texture("world" + world + "/player" + player + ".png");
-        texture.put("stand", new TextureRegion(valera, 0, 0, valera.getWidth() / 4, valera.getHeight()));
-        texture.put("down", new TextureRegion(valera, valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
-        texture.put("up", new TextureRegion(valera, 2 * valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
-        texture.put("slide", new TextureRegion(valera, 3 * valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
+        playerTextures.put("stand", new TextureRegion(valera, 0, 0, valera.getWidth() / 4, valera.getHeight()));
+        playerTextures.put("down", new TextureRegion(valera, valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
+        playerTextures.put("up", new TextureRegion(valera, 2 * valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
+        playerTextures.put("slide", new TextureRegion(valera, 3 * valera.getWidth() / 4, 0, valera.getWidth() / 4, valera.getHeight()));
         //texture = new Texture("player.png");
         frame = new Rectangle(x, y, valera.getWidth() / 8, valera.getHeight() / 2);
-        currentTexture = texture.get("stand");
+        currentTexture = playerTextures.get("stand");
     }
 
     @Override
@@ -92,26 +92,26 @@ public class Player extends Objects {
         else if(onPl == 1 && position.y < h - 20 && speed.y < 0 && speed.x > 0) {
             position.x -= currentTexture.getTexture().getWidth() / 16;
             speed.x = -5;
-            currentTexture = texture.get("down");
+            currentTexture = playerTextures.get("down");
         }
         /** Установить гравитацию при прыжке */
         else if(position.y > h) {
             gravity = DEF_GRAV;
-            currentTexture = texture.get("up");
+            currentTexture = playerTextures.get("up");
         }
         /** Спрыгнуть (осталось от раннера) */
         else {
             gravity = DEF_GRAV;
             if(speed.y == 0)
                 speed.y = -450;
-            currentTexture = texture.get("down");
+            currentTexture = playerTextures.get("down");
         }
     }
 
     /** Пусть будет метод для перекадровки извне */
     public void setCurrentTexture(String current) {
         try {
-            currentTexture = texture.get(current);
+            currentTexture = playerTextures.get(current);
         }
         catch(NullPointerException e) {
             Gdx.app.error("Player", "setCurrentTexture received invalid String key");
@@ -131,4 +131,7 @@ public class Player extends Objects {
             return true;
         return false;
     }
+
+    /** Для очистки памяти от текстур */
+    public HashMap<String, TextureRegion> getTextures() {return playerTextures;}
 }
