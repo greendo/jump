@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.jump.game.ActionController;
+import com.jump.game.controllers.ActionController;
 import com.jump.game.Jumper;
 import com.jump.game.sprites.platforms.PlatformSimple;
 import com.jump.game.sprites.platforms.PlatformSlide;

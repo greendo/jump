@@ -4,12 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jump.game.ActionController;
+import com.jump.game.controllers.ActionController;
 import com.jump.game.Jumper;
 import com.jump.game.sprites.Player;
 import com.jump.game.sprites.World;
-
-import java.util.Random;
 
 public class GameState extends State {
 
@@ -17,6 +15,10 @@ public class GameState extends State {
 
     private World world;
     private Player player;
+
+    @Override
+    public Player getPlayer() {return player;}
+
     private int worldIndex;
     private int playerIndex;
 

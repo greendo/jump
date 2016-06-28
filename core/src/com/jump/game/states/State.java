@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.jump.game.sprites.Player;
 
 /**
  * Created by jc on 23.05.16.
@@ -30,6 +31,9 @@ public abstract class State {
     public abstract void dispose();
     /** for pause */
     public abstract void continueGame();
+
+    /** hack for pause -> game controller */
+    protected Player getPlayer() {return null;}
 
     public StateManager getsManager() {return sManager;}
 }

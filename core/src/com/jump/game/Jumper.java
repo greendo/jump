@@ -22,6 +22,7 @@ public class Jumper extends ApplicationAdapter {
 
 	/** pause and resume */
 	public static boolean PAUSE = false;
+	/** exit hack */
 
 	/** settings */
 	public static GameVars gameVars = GameVars.getGameVars();
@@ -30,8 +31,8 @@ public class Jumper extends ApplicationAdapter {
 	public void create() {
 		/** for future menu controller? */
 		//Gdx.input.setInputProcessor(new ActionController(player, this));
-		Gdx.input.setCatchBackKey(true);
-		Gdx.input.setCatchMenuKey(true);
+		//Gdx.input.setCatchBackKey(true);
+		//Gdx.input.setCatchMenuKey(true);
 
 		batch = new SpriteBatch();
 		font = new BitmapFont();
@@ -48,10 +49,9 @@ public class Jumper extends ApplicationAdapter {
 		//Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(!PAUSE) {
-			sm.update(Gdx.graphics.getDeltaTime());
-			sm.render(batch, font);
-		}
+
+		sm.update(Gdx.graphics.getDeltaTime());
+		sm.render(batch, font);
 	}
 
 	@Override

@@ -1,10 +1,11 @@
-package com.jump.game;
+package com.jump.game.controllers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.jump.game.states.ChoosePlayerState;
+import com.jump.game.states.MenuState;
 import com.jump.game.states.PauseState;
 import com.jump.game.states.State;
 
@@ -46,7 +47,7 @@ public class ChoosePlayerController implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.BACK || keycode == Input.Keys.HOME || keycode == Input.Keys.MENU) {
-            state.getsManager().init(new PauseState(state.getsManager(), state));
+            state.getsManager().init(new MenuState(state.getsManager()));
         }
         return true;
     }

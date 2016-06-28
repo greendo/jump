@@ -1,4 +1,4 @@
-package com.jump.game;
+package com.jump.game.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

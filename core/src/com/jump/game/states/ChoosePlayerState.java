@@ -1,17 +1,14 @@
 package com.jump.game.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.jump.game.ChoosePlayerController;
+import com.jump.game.controllers.ChoosePlayerController;
 import com.jump.game.Jumper;
-import com.jump.game.sprites.Player;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -35,6 +32,8 @@ public class ChoosePlayerState extends State {
         camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
 
         Gdx.input.setInputProcessor(new ChoosePlayerController(worlds.get(currentWorld).frames, this));
+        Gdx.input.setCatchBackKey(true);
+        Gdx.input.setCatchMenuKey(true);
     }
 
     public HashMap<Integer, Rectangle> getFrames() {return worlds.get(currentWorld).frames;}
@@ -105,7 +104,7 @@ public class ChoosePlayerState extends State {
 
     @Override
     public void render(SpriteBatch sb, BitmapFont font) {
-        //sb.setProjectionMatrix(camera.combined);
+        sb.setProjectionMatrix(camera.combined);
         sb.begin();
 
         /** Фон для выбора */
