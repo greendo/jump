@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jump.game.ActionController;
 import com.jump.game.Jumper;
 import com.jump.game.sprites.Player;
 import com.jump.game.sprites.World;
 
-import java.util.HashMap;
 import java.util.Random;
 
 public class GameState extends State {
@@ -35,11 +33,9 @@ public class GameState extends State {
 
         /** for swipes */
         Gdx.input.setInputProcessor(new ActionController(player, this));
-        //Gdx.input.setCatchBackKey(true);
-        //Gdx.input.setCatchMenuKey(true);
+        Gdx.input.setCatchBackKey(true);
+        Gdx.input.setCatchMenuKey(true);
     }
-
-    private void pause() {sManager.init(new PauseState(sManager, this));}
 
     @Override
     protected void handleInput() {

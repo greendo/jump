@@ -31,6 +31,9 @@ public class ChoosePlayerState extends State {
         for(int i = 1; i <= dirsCount; i++)
             worlds.put(i, new WorldSelectPlayer(i));
 
+
+        camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
+
         Gdx.input.setInputProcessor(new ChoosePlayerController(worlds.get(currentWorld).frames, this));
     }
 

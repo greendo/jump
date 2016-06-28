@@ -16,6 +16,7 @@ public class MenuState extends State {
     public MenuState(StateManager sm) {
         super(sm);
         tmp = "Tap to start";
+        camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
     }
 
     @Override
@@ -31,7 +32,11 @@ public class MenuState extends State {
     public void render(SpriteBatch sb, BitmapFont font) {
         sb.begin();
         font.draw(sb, tmp, Jumper.WIDTH / 2 - 10, Jumper.HEIGHT / 2);
+        //font.draw(sb, tmp, camera.viewportWidth / 2 - 10, camera.viewportHeight / 2);
         sb.end();
+//        sb.begin();
+//        font.draw(sb, tmp, camera.position.x + Jumper.WIDTH / 2, camera.position.y + Jumper.HEIGHT / 2);
+//        sb.end();
     }
 
     @Override

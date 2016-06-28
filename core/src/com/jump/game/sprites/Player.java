@@ -45,6 +45,7 @@ public class Player extends Objects {
 
     @Override
     public void update(float delta) {
+
         if(position.y > 0)
             speed.add(0, gravity);
 
@@ -65,6 +66,10 @@ public class Player extends Objects {
                 speed.y = JUMP_Y_MAX;
             if(speed.x > JUMP_X_MAX)
                 speed.x = JUMP_X_MAX;
+
+            /** Костыль для бага, найденого в паузе, когда можно прыгнуть вниз */
+            if(speed.y < 0)
+                speed.y = 0;
         }
     }
 

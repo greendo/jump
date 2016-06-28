@@ -16,6 +16,7 @@ public class PauseState extends State {
     public PauseState(StateManager sm, State state) {
         super(sm);
         this.state = state;
+        camera.setToOrtho(false, Jumper.WIDTH, Jumper.HEIGHT);
     }
 
     @Override
@@ -32,9 +33,9 @@ public class PauseState extends State {
 
     @Override
     public void render(SpriteBatch sb, BitmapFont font) {
-        //sb.setProjectionMatrix(camera.combined);
+        sb.setProjectionMatrix(camera.combined);
         sb.begin();
-        font.draw(sb, "pause, tap to continue", Jumper.WIDTH / 2 - 10, Jumper.HEIGHT / 2);
+        font.draw(sb, "pause, tap to continue", Jumper.WIDTH / 2, Jumper.HEIGHT / 2);
         sb.end();
     }
 

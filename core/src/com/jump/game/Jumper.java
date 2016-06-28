@@ -48,28 +48,33 @@ public class Jumper extends ApplicationAdapter {
 		//Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(!PAUSE)
+		if(!PAUSE) {
 			sm.update(Gdx.graphics.getDeltaTime());
-		sm.render(batch, font);
+			sm.render(batch, font);
+		}
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
 		sm.getState().dispose();
+		batch.dispose();
+		font.dispose();
 	}
 
 	@Override
 	public void pause() {
+		super.pause();
 		PAUSE = true;
-		Gdx.app.error("pause", "was called from Jumper.java");
+		Gdx.app.error("pause", "was called from Jumper.java, PAUSE set to: " + PAUSE);
 		sm.init(new PauseState(sm, sm.getState()));
 	}
 
 	@Override
 	public void resume() {
+		super.resume();
 		PAUSE = false;
-		Gdx.app.error("resume", "was called from Jumper.java");
-		sm.getState().continueGame();
+		Gdx.app.error("resume", "was called from Jumper.java, PAUSE set to: " + PAUSE);
+		//sm.getState().continueGame();
 	}
 }
